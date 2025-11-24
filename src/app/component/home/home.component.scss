@@ -1,0 +1,85 @@
+/* Glassmorphism Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* Bounce delay for icons */
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+.animation-delay-3000 {
+  animation-delay: 3s;
+}
+
+/* Counter numbers (smooth increment animation) */
+.counter {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Skill bar animation */
+.skill-bar {
+  width: 0;
+  transition: width 2s ease-in-out;
+}
+/* Orbit container */
+.orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16rem; /* orbit diameter */
+  height: 16rem;
+  margin-top: -8rem;
+  margin-left: -8rem;
+  border-radius: 50%;
+  animation: spin 20s linear infinite;
+  pointer-events: none; /* prevent accidental hovers on orbit circle */
+}
+
+/* Different orbit speeds + directions */
+.orbit-1 {
+  animation-duration: 18s;
+}
+.orbit-2 {
+  animation-duration: 22s;
+  animation-direction: reverse;
+}
+.orbit-3 {
+  animation-duration: 26s;
+}
+.orbit-4 {
+  animation-duration: 30s;
+  animation-direction: reverse;
+}
+
+/* Orbit icon */
+.icon {
+  position: absolute;
+  top: -1.75rem; /* starts at top edge of orbit */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Orbit spin animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
