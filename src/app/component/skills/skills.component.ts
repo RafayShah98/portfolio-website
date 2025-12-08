@@ -13,6 +13,17 @@ import { RouterModule } from '@angular/router';
 export class SkillsComponent {
   skills = [
     {
+      title: 'Project Management',
+      icon: 'fas fa-project-diagram',
+      items: [
+        'Agile & Scrum Methodologies',
+        'Project Planning & Scheduling',
+        'Stakeholder Management',
+        'Sprint Planning',
+        'Team Collaboration',
+      ],
+    },
+    {
       title: 'Programming & Web Development',
       icon: 'fas fa-code',
       items: ['Angular', 'NodeJs', 'Tailwind', 'HTML', 'CSS/SCSS', 'Bootstrap', 'Python'],
