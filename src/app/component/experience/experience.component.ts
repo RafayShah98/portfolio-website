@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -7,55 +7,84 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './experience.component.html',
-  styleUrl: './experience.component.scss',
+  styleUrls: ['./experience.component.scss'],
 })
 export class ExperienceComponent {
   activeFilter: string = 'all';
 
+  filters = [
+    { id: 'all', label: 'All Projects' },
+    { id: 'salesforce', label: 'Salesforce' },
+    { id: 'java', label: 'Java & Spring' },
+    { id: 'aws', label: 'AWS Cloud' },
+    { id: 'data', label: 'Data & BI' },
+  ];
+
   projects = [
     {
       id: 1,
-      category: 'python',
-      title: 'Multilingual Voice Assistant',
+      category: 'java',
+      title: 'Serverless Microservices',
       description:
-        'Developed a Python-based voice assistant capable of real-time language detection and translation with OpenAI integration.',
-      image: 'assets/images/voice-assistant.jpg',
-      technologies: ['Python', 'OpenAI', 'NLP'],
+        'A scalable backend architecture handling high-volume requests using Java Spring Boot deployed on AWS Lambda with API Gateway integration.',
+      image: 'assets/images/serverless_microservices.png', // Ensure you have these images or placeholders
+      technologies: ['Java', 'Spring Boot', 'AWS Lambda', 'Docker'],
     },
     {
       id: 2,
       category: 'salesforce',
-      title: 'Salesforce Nonprofit Solution',
+      title: 'Nonprofit CRM Solution',
       description:
-        'Custom Salesforce and Angular solution for nonprofit organizations to enhance efficiency and user experience.',
-      image: 'assets/images/sf-project.jpg',
-      technologies: ['Salesforce', 'Angular', 'Apex'],
+        'Custom Salesforce implementation for donor management, featuring complex Apex triggers, LWC interfaces, and automated email workflows.',
+      image: 'assets/images/tf.jpg',
+      technologies: ['Salesforce', 'Apex', 'LWC', 'SOQL'],
     },
-    // Add all your projects here with proper category assignments
+    {
+      id: 3,
+      category: 'aws',
+      title: 'Cloud Data Pipeline',
+      description:
+        'Automated ETL pipeline using AWS Glue and S3 to process terabytes of operational data for real-time analytics.',
+      image: 'assets/images/cloud_data.png',
+      technologies: ['AWS Glue', 'S3', 'Python', 'Athena'],
+    },
+    {
+      id: 4,
+      category: 'data',
+      title: 'Healthcare Analytics Dashboard',
+      description:
+        'Interactive Power BI dashboard for patient data visualization, integrating directly with SQL Server healthcare databases.',
+      image: 'assets/images/health-project.jpg',
+      technologies: ['Power BI', 'SQL Server', 'DAX'],
+    },
+    {
+      id: 5,
+      category: 'java',
+      title: 'E-Commerce REST API',
+      description:
+        'Secure RESTful API for a multi-vendor e-commerce platform built with Spring Security and Hibernate.',
+      image: 'assets/images/ecom-project.jpg',
+      technologies: ['Java', 'Spring Security', 'PostgreSQL', 'Redis'],
+    },
+    {
+      id: 6,
+      category: 'salesforce',
+      title: 'Salesforce-Jira Integration',
+      description:
+        'Middleware solution syncing Salesforce Cases with Jira tickets using REST APIs to streamline support and dev team collaboration.',
+      image: 'assets/images/voice-assistant.jpg',
+      technologies: ['Salesforce API', 'Node.js', 'Jira API'],
+    },
   ];
 
   filterProjects(category: string) {
     this.activeFilter = category;
   }
 
-  getButtonClass(category: string): string {
-    const baseClasses = 'px-4 py-2 rounded-full transition-all duration-300 font-medium ';
-    if (this.activeFilter === category) {
-      return baseClasses + 'bg-blue-600 text-white shadow-md';
-    } else {
-      return (
-        baseClasses +
-        'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-      );
+  getVisibleProjects() {
+    if (this.activeFilter === 'all') {
+      return this.projects;
     }
-  }
-
-  hasNoProjects(): boolean {
-    if (this.activeFilter === 'all') return false;
-
-    const visibleProjects = this.projects.filter(
-      (project) => project.category === this.activeFilter
-    );
-    return visibleProjects.length === 0;
+    return this.projects.filter((project) => project.category === this.activeFilter);
   }
 }

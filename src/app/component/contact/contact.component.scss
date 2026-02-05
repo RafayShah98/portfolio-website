@@ -1,9 +1,11 @@
-/* Custom styling if needed */
-:host {
-  display: block;
-}
-
-input.ng-invalid.ng-touched,
-textarea.ng-invalid.ng-touched {
-  border-color: #f87171; /* red-400 */
+/* Only needed if you want specific overrides not in Tailwind */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px #1e293b inset; /* matches bg-slate-800 */
+  transition: background-color 5000s ease-in-out 0s;
 }

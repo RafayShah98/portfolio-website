@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
   FormGroup,
@@ -35,7 +35,7 @@ export class ContactComponent implements OnInit {
       message: ['', [Validators.required, Validators.minLength(10)]],
     });
 
-    // Initialize EmailJS with your public key
+    // Ensure your Public Key is correct
     emailjs.init('yddhxVofTnH4OrRSE');
   }
 
@@ -56,7 +56,7 @@ export class ContactComponent implements OnInit {
     const formData = this.contactForm.value;
 
     try {
-      // Send email to yourself (website owner)
+      // 1. Email to YOU (Owner)
       await emailjs.send('service_y5j17ek', 'template_0w7svat', {
         from_name: formData.name,
         from_email: formData.email,
@@ -65,7 +65,7 @@ export class ContactComponent implements OnInit {
         to_email: 'rafayshah.9814@gmail.com',
       });
 
-      // Send auto-response to user
+      // 2. Auto-reply to USER
       await emailjs.send('service_y5j17ek', 'template_yccnu7c', {
         to_name: formData.name,
         to_email: formData.email,
@@ -73,13 +73,12 @@ export class ContactComponent implements OnInit {
         user_message: formData.message,
       });
 
-      this.successMessage =
-        '✅ Your message was sent successfully! You will receive a confirmation email shortly.';
+      this.successMessage = 'Message sent! I will get back to you soon.';
       this.contactForm.reset();
       this.submitted = false;
     } catch (error) {
       console.error('Error sending email:', error);
-      this.errorMessage = '❌ Oops! Something went wrong. Please try again later.';
+      this.errorMessage = 'Failed to send message. Please try again or email me directly.';
     } finally {
       this.loading = false;
     }

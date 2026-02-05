@@ -1,63 +1,86 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, HostListener } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  ViewChildren,
+  QueryList,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CountUpModule } from 'ngx-countup';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent implements AfterViewInit, OnDestroy {
+  private observer!: IntersectionObserver;
+
   constructor(private el: ElementRef) {}
 
   ngAfterViewInit(): void {
-    this.animateOnScroll();
+    this.setupIntersectionObserver();
   }
 
-  @HostListener('window:scroll', [])
-  onScroll() {
-    this.animateOnScroll();
+  ngOnDestroy(): void {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
   }
 
-  private animateOnScroll() {
+  private setupIntersectionObserver() {
+    // Select all elements that need animation
     const counters = this.el.nativeElement.querySelectorAll('.counter');
-    const skills = this.el.nativeElement.querySelectorAll('.skill-bar');
+    const skillBars = this.el.nativeElement.querySelectorAll('.skill-bar');
 
-    counters.forEach((counter: HTMLElement) => {
-      const target = +counter.getAttribute('data-target')!;
-      if (this.isInViewport(counter) && !counter.classList.contains('animated')) {
-        this.animateCounter(counter, target);
-        counter.classList.add('animated');
-      }
-    });
+    const options = {
+      root: null, // viewport
+      rootMargin: '0px',
+      threshold: 0.2, // Trigger when 20% of element is visible
+    };
 
-    skills.forEach((bar: HTMLElement) => {
-      const width = bar.getAttribute('data-width');
-      if (this.isInViewport(bar) && !bar.classList.contains('animated')) {
-        bar.style.width = width!;
-        bar.classList.add('animated');
-      }
-    });
+    this.observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const target = entry.target as HTMLElement;
+
+          if (target.classList.contains('counter')) {
+            this.animateCounter(target);
+          } else if (target.classList.contains('skill-bar')) {
+            const width = target.getAttribute('data-width');
+            target.style.width = width || '0%';
+          }
+
+          // Stop observing once animated
+          obs.unobserve(target);
+        }
+      });
+    }, options);
+
+    // Start observing
+    counters.forEach((el: any) => this.observer.observe(el));
+    skillBars.forEach((el: any) => this.observer.observe(el));
   }
 
-  private animateCounter(element: HTMLElement, target: number) {
+  private animateCounter(element: HTMLElement) {
+    const target = +element.getAttribute('data-target')!;
+    const duration = 2000; // 2 seconds
+    const steps = 50;
+    const increment = target / steps;
+    const stepTime = duration / steps;
+
     let current = 0;
-    const increment = target / 100;
-    const interval = setInterval(() => {
+    const timer = setInterval(() => {
       current += increment;
       if (current >= target) {
-        current = target;
-        clearInterval(interval);
+        element.innerText = target.toString(); // Ensure clean integer at end
+        clearInterval(timer);
+      } else {
+        element.innerText = Math.floor(current).toString();
       }
-      element.innerText = Math.floor(current).toString();
-    }, 20);
-  }
-
-  private isInViewport(el: HTMLElement): boolean {
-    const rect = el.getBoundingClientRect();
-    return rect.top < window.innerHeight && rect.bottom > 0;
+    }, stepTime);
   }
 }
